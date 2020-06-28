@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Coronavirus nel mondo</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v2.3.4/dist/mini-default.min.css">
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}       
+    </style>
+</head>
+
+<body>
+
+	<header id ="header">
+		<h2 id ="h">Dati Coronavirus regionali</h2>
+	</header>
+		<div class="container">
+			<div id="menu" class="col-sm col-md-10 col-md-offset-1">			
+			<ul>
+					<li><a href="../../index.html">Home</a></li>
+					<li><a href="#">Dati Mondiali</a>
+					<ul>
+						<li><a href="../../world/overall/overall.html">Dati Generali</a></li>
+						<li><a href="../../world/confirmed/confirmed.html">Dati Confermati</a></li>
+						<li><a href="../../world/deaths/deaths.html">Dati Deceduti</a></li>
+						<li><a href="../../world/recovered/recovered.html">Dati Guariti</a></li>
+					</ul></li>
+					<li><a href="#">Dati Italia</a>
+					<ul>
+						<li><a href="../../italy/nazionali/italia.html">Dati Nazionali</a></li>
+						<li><a href="../../italy/regionali/regioni.html">Dati Regionali</a></li>
+						<li><a href="../../italy/provinciali/provincie.html">Dati Provinciali</a></li>
+					</ul></li>
+					<li><a href="#">Grafici</a>
+					<ul>
+						<li><a href="../../grafici/world.html">Mondiali</a></li>
+						<li><a href="../../grafici/national.html">Nazionali</a></li>
+					</ul></li>
+					<li><a href="../../info.html">About</a></li>
+					</ul>
+			<br /><br /><br />
+		</div>
+		   
+		
+		
+		  <div id="tables" class="row cols-sm-12">
+			<div class="tables-reg_Ita" class="col-md-offset-1" id = "dati">
+			 </div>
+			 <a href="#header">Torna su</a>
+  </div>
+</div>
+<footer>
+  <div class="col-sm col-md-10 col-md-offset-1">
+    <p>Copyright &copy;2020 
+    </p>
+  </div>
+</footer>
+
+	
+	<script>
+	
+		function testJSON(){
+			var dati= $.getJSON("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json");
+			return dati;	
+
+		}
+	 
+	$.when(testJSON()).then(function(jsondata){
+	
+	var array_dati = jsondata; 
+
+	var i_data = array_dati.data;
+	var i_stato = [];
+	var i_codice_regione = [];
+    var i_denominazione_regione = [];
+    var i_lat = [];
+    var i_long = [];
+	var i_ricoverati_con_sintomi = [];
+	var i_isolamento_domiciliare=[];
+	var i_totale_positivi = [];
+	var i_nuovi_positivi = [];
+	var i_dimessi_guariti = [];
+	var i_deceduti = [];
+	var i_totale_casi = [];
+	var i_tamponi = [];
+	var i_casi_testati = [];
+	
+	console.log(array_dati);
+	
+   $.ajax({
+      url:"https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json",
+      method:'GET',
+      cache:false,
+      type:"text/json"
+   })
+   
+   .done(function(evt) {
+      // Set timeout for lazy loading
+      setTimeout(function(){
+         var result = JSON.parse(evt);
+	
+		var html = '';
+         html += '<div class="tables-covid-content">';
+		 
+		 
+		 
+		 html +='<table class ="table" >'
+                  +'<thead>'
+                  +'<tr>'
+				  +'<th scope="col" colspan="100%">Andamento Regionale dei dati del Coronavirus</th>'
+				  +'</tr>'                 
+				  +'<tr>'
+				  +'<th scope="col">ID</th>'
+				  +'<th scope="col">Stato</th>'
+				  +'<th scope="col">Codice Regionale</th>'
+				  +'<th scope="col">Nome Regione</th>'
+				  +'<th scope="col">Latitudine</th>'
+				  +'<th scope="col">Longitudine</th>'
+                  +'<th scope="col">Ricoverati con sintomi</th>'
+                  +'<th scope="col">Isolamento Domiciliare</th>'
+				  +'<th scope="col">Totale Positivi</th>'
+				  +'<th scope="col">Nuovi Positivi</th>'
+                  +'<th scope="col">Dimessi Guariti</th>'
+                  +'<th scope="col">Deceduti</th>'
+                  +'<th scope="col">Totale Casi</th>'
+                  +'<th scope="col">Tamponi</th>'
+                  +'<th scope="col">Casi Testati</th>'
+                  +'</tr>'
+                  +'</thead>'
+                  +'<tbody>';
+		 
+         for(var i = 0; i < array_dati.length;i++){
+				
+				i_stato[i] = array_dati[i].stato;
+				i_codice_regione[i] = array_dati[i].codice_regione;
+				i_denominazione_regione[i] = array_dati[i].denominazione_regione;
+				i_lat[i] = array_dati[i].lat;
+				i_long[i] = array_dati[i].long;
+				i_ricoverati_con_sintomi[i] = array_dati[i].ricoverati_con_sintomi;
+				i_isolamento_domiciliare[i] = array_dati[i].isolamento_domiciliare;
+				i_totale_positivi[i] = array_dati[i].totale_positivi;
+				i_nuovi_positivi[i] = array_dati[i].nuovi_positivi;
+				i_dimessi_guariti[i] = array_dati[i].dimessi_guariti;
+				i_deceduti[i] = array_dati[i].deceduti;
+				i_totale_casi[i] = array_dati[i].totale_casi;
+				i_tamponi[i] = array_dati[i].tamponi;
+				i_casi_testati[i] = array_dati[i].casi_testati;
+						   
+                  html +='<tr>'
+                     +'<th scope="row">'+(i+1)+'</th>'
+                     +'<td>'+i_stato[i]+'</td>'
+					 +'<td>'+i_codice_regione[i]+'</td>'
+					 +'<td>'+i_denominazione_regione[i]+'</td>'
+					 +'<td>'+i_lat[i]+'</td>'
+					 +'<td>'+i_long[i]+'</td>'
+					 +'<td>'+i_ricoverati_con_sintomi[i]+'</td>'
+					 +'<td>'+i_isolamento_domiciliare[i]+'</td>'
+					 +'<td>'+i_totale_positivi[i]+'</td>'
+					 +'<td>'+i_nuovi_positivi[i]+'</td>'
+					 +'<td>'+i_dimessi_guariti[i]+'</td>'
+					 +'<td>'+i_deceduti[i]+'</td>'
+					 +'<td>'+i_totale_casi[i]+'</td>'
+					 +'<td>'+i_tamponi[i]+'</td>'
+					 +'<td>'+i_casi_testati[i]+'</td>'
+                     +'</tr>';
+					 +'<tr style="border:1px solid black;">'
+					  +'<th scope="col" colspan="14">Dati Aggiornati al:</th>'
+					  +'<td colspan="14">' + i_data + '</td>'
+					  +'</tr>';
+               
+               
+            
+         }
+		 html +='</tbody></table>';
+         html +='</div>';         // Set all content
+         $('.tables-reg_Ita').html(html);
+     },100); 
+  
+   
+  
+   });
+});
+
+	
+	
+</script>
+</body>
+
+</html>

@@ -1,0 +1,429 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Coronavirus nel mondo</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="../js/Chart.min.js"></script>
+	<script src="../js/utils.js"></script>
+	<script type="text/javascript">
+	</script>
+	
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v2.3.4/dist/mini-default.min.css">
+
+
+
+
+	
+	<header id ="header">
+		<h2 id ="h">Grafici con dati nationali della pandemia di Coronavirus</h2>
+	</header>
+		<div class="container">
+			<div id="menu" class="col-sm col-md-10 col-md-offset-1">			
+			<ul>
+				<li><a href="../index.html">Home</a></li>
+				<li><a href="#">Dati Mondiali</a>
+				<ul>
+					<li><a href="../world/overall/overall.html">Dati Generali</a></li>
+					<li><a href="../world/confirmed/confirmed.html">Dati Confermati</a></li>
+					<li><a href="../world/deaths/deaths.html">Dati Deceduti</a></li>
+					<li><a href="../world/recovered/recovered.html">Dati Guariti</a></li>
+				</ul></li>
+				<li><a href="#">Dati Italia</a>
+				<ul>
+					<li><a href="../italy/nazionali/italia.html">Dati Nazionali</a></li>
+					<li><a href="../italy/regionali/regioni.html">Dati Regionali</a></li>
+					<li><a href="../italy/provinciali/provincie.html">Dati Provinciali</a></li>
+				</ul></li>
+				<li><a href="#">Grafici</a>
+				<ul>
+					<li><a href="../grafici/world.html">Mondiali</a></li>
+					<li><a href="../grafici/national.html">Nazionali</a></li>
+				</ul></li>
+				<li><a href="../info.html">About</a></li>
+						</ul>
+			<br /><br /><br />
+		</div>
+		   
+		
+		
+		  <div class="row cols-sm-12 cols-md-10">
+			<div class="col-md-offset-1" id = "grafici">
+				<div id="container" style="width: 90%;">
+				<p style="text-align: center">Grafici andamento in Italia della pandemia di Coronavirus</p>
+				<button type="button" class="collapsible">Grafici</button>
+				<div class="content">
+					<canvas id="canvas"></canvas>
+					<canvas id="canvas2"></canvas>
+				</div>
+					<br><br>
+					<p style="text-align: center">Grafici andamento nelle regioni italiane della pandemia di Coronavirus</p>
+				<button type="button" class="collapsible">Grafici</button>
+				<div class="content">
+					<canvas id="canvas3"></canvas>					
+					<canvas id="canvas4"></canvas>
+				</div>
+					<br><br>
+					<p style="text-align: center">Grafici andamento nelle provincie italiane della pandemia di Coronavirus</p>	
+				<button type="button" class="collapsible">Grafico</button>
+				<div class="content">
+					<canvas id="canvas5"></canvas>
+				</div>
+				</div>
+			 </div>
+			 <a href="#header">Torna su</a>
+  </div>
+</div>
+<footer>
+  <div class="col-sm col-md-10 col-md-offset-1">
+    <p>Copyright &copy; 2020 
+    </p>
+  </div>
+</footer>
+		
+	<script>
+	var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+	
+	
+	function testJSON_naz(){
+			var dati_naz= $.getJSON("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json");
+			
+			return dati_naz;	
+
+		}
+	 
+	$.when(testJSON_naz()).then(function(jsondata_naz){
+	
+	
+	console.log(jsondata_naz);
+	
+	var data_nl = [];
+	var tot_positivi = [];
+	var tot_guariti = [];
+	var tot_deceduti = [];
+	var tot_casi = [];
+	
+	for(var i = 0; i < jsondata_naz.length;i++){
+		tot_positivi[i] = jsondata_naz[i].totale_positivi;
+		tot_guariti[i] = jsondata_naz[i].dimessi_guariti;
+		tot_deceduti[i] = jsondata_naz[i].deceduti;
+		data_nl[i] = jsondata_naz[i].data;
+	
+	}
+	console.log(data_nl);
+	console.log(tot_positivi);
+	console.log(tot_guariti);
+	console.log(tot_deceduti);
+	
+		var color = Chart.helpers.color;
+		var barChartData = {
+			labels: data_nl,
+			datasets: [{
+				label: 'Totale Positivi',
+				backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.red,
+				borderWidth: 1,
+				data: 
+					tot_positivi
+			
+			},{
+				label: 'Totale Guariti',
+				backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.blue,
+				borderWidth: 1,
+				data: 
+					tot_guariti
+			
+			},{
+				label: 'Totale Deceduti',
+				backgroundColor: color(window.chartColors.black).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.black,
+				borderWidth: 1,
+				data:
+					tot_deceduti
+		
+			}]
+
+		};
+
+		
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Grafico Andamento Nazionale Coronavirus'
+					}
+				}
+			});
+
+		
+
+		});
+		
+		$.when(testJSON_naz()).then(function(jsondata_naz){
+	
+	
+	console.log(jsondata_naz);
+	var tot_tamponi= [];
+	var data_nl = [];
+	
+	for(var i = 0; i < jsondata_naz.length;i++){
+		tot_tamponi[i] = jsondata_naz[i].tamponi;
+		data_nl[i] = jsondata_naz[i].data;
+	}
+	console.log(tot_tamponi);
+	
+	var color = Chart.helpers.color;
+		var barChartData = {
+			labels: data_nl,
+			datasets: [{
+				label: 'Totale Tamponi',
+				backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.yellow,
+				borderWidth: 1,
+				data: 
+					tot_tamponi
+			
+			}]
+
+		};
+
+		
+			var ctx = document.getElementById('canvas2').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Grafico Andamento Nazionale Coronavirus'
+					}
+				}
+			});
+	
+	});
+	
+	function testJSON_reg(){
+			var dati_reg= $.getJSON("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json");
+			
+			return dati_reg;	
+
+		}
+	 
+	$.when(testJSON_reg()).then(function(jsondata_reg){
+	
+	
+	console.log(jsondata_reg);
+	var er;
+	var data_nl = [];
+	var tot_positivi = [];
+	var tot_guariti = [];
+	var tot_deceduti = [];
+	var tot_casi = [];
+	var regioni = [];
+
+	
+	for(var i = 0; i < jsondata_reg.length;i++){
+		regioni[i] = jsondata_reg[i].denominazione_regione;
+	
+			tot_positivi[i] = jsondata_reg[i].totale_positivi;
+			tot_guariti[i] = jsondata_reg[i].dimessi_guariti;
+			tot_deceduti[i] = jsondata_reg[i].deceduti;
+			data_nl[i] = jsondata_reg[i].data;
+		
+	}
+	console.log(regioni.indexOf('Emilia-Romagna'));
+	console.log(regioni.indexOf('Lombardia'));
+	console.log(data_nl);
+	console.log(tot_positivi);
+	console.log(tot_guariti);
+	console.log(tot_deceduti);
+	
+		var color = Chart.helpers.color;
+		var barChartData = {
+			labels: data_nl,
+			datasets: [{
+				label: 'Totale Positivi',
+				backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.red,
+				borderWidth: 1,
+				data: 
+					tot_positivi
+			
+			},{
+				label: 'Totale Guariti',
+				backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.blue,
+				borderWidth: 1,
+				data: 
+					tot_guariti
+			
+			},{
+				label: 'Totale Deceduti',
+				backgroundColor: color(window.chartColors.black).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.black,
+				borderWidth: 1,
+				data:
+					tot_deceduti
+		
+			}]
+
+		};
+
+		
+			var ctx = document.getElementById('canvas3').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Grafico Andamento Regionale Coronavirus'
+					}
+				}
+			});
+
+		
+
+		});
+		
+		$.when(testJSON_reg()).then(function(jsondata_reg){
+	
+	
+	console.log(jsondata_reg);
+	var tot_tamponi= [];
+	var data_nl = [];
+	
+	for(var i = 0; i < jsondata_reg.length;i++){
+		tot_tamponi[i] = jsondata_reg[i].tamponi;
+		data_nl[i] = jsondata_reg[i].data;
+	}
+	console.log(tot_tamponi);
+	
+	var color = Chart.helpers.color;
+		var barChartData = {
+			labels: data_nl,
+			datasets: [{
+				label: 'Totale Tamponi',
+				backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.yellow,
+				borderWidth: 1,
+				data: 
+					tot_tamponi
+			
+			}]
+
+		};
+
+		
+			var ctx = document.getElementById('canvas4').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Grafico Tamponi Regionali Coronavirus'
+					}
+				}
+			});
+	
+	});
+	
+	function testJSON_pro(){
+			var dati_pro= $.getJSON("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json");
+			
+			return dati_pro;	
+
+		}	
+		$.when(testJSON_pro()).then(function(jsondata_pro){
+	
+	
+	console.log(jsondata_pro);
+	var tot_casi= [];
+	var data_nl = [];
+	
+	for(var i = 0; i < jsondata_pro.length;i++){
+		tot_casi[i] = jsondata_pro[i].totale_casi;
+		data_nl[i] = jsondata_pro[i].data;
+	}
+	console.log(tot_casi);
+	
+	var color = Chart.helpers.color;
+		var barChartData = {
+			labels: data_nl,
+			datasets: [{
+				label: 'Totale Casi',
+				backgroundColor: color(window.chartColors.gray).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.gray,
+				borderWidth: 1,
+				data: 
+					tot_casi
+			
+			}]
+
+		};
+
+		
+			var ctx = document.getElementById('canvas5').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Grafico Totale Casi Provinciali Coronavirus'
+					}
+				}
+			});
+	
+	});
+	
+	
+	</script>
+	
+	</body>
+	<!--
+	-->
+	
+
+</html>
