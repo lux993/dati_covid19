@@ -22,11 +22,11 @@ Problemi noti da risolvere:
  - Caricamento lento di alcune pagine
  - Caricameto lento dei grafici
  - Modificare grafici in grafici/dati regionali mettendo i grafici di:
-  -- Emilia Romagna;
-  -- Lombardia;
- -   Modificare grafici in grafici/dati provinciali mettendo i grafici di:
-  -- Ferrara;
-  -- Bologna;
+   - Emilia Romagna;
+   - Lombardia;
+ - Modificare grafici in grafici/dati provinciali mettendo i grafici di:
+   - Ferrara;
+   - Bologna;
 
 
 ### Future Update
@@ -35,3 +35,4 @@ Problemi noti da risolvere:
     - Sistemare caricamento generale del sito;
     - Sistemare sito per renderlo responsive;
     - Creazione app mobile;
+    
