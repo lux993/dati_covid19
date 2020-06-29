@@ -1,0 +1,24 @@
+Istruzioni per completare il compito
+
+1- Andare su Coronavirus tracker API https://coronavirus-tracker-api.herokuapp.com/all
+
+2- copiare i dati della risposta API in un file di estensione .json
+
+3- creare cartella con dentro il file .json creato nel punto 2)
+
+4- creare una repo su github. Una volta creata la repo vi da anche le istruzioni Git per caricare il file .json nella repo 
+   su github
+
+5- Una volta che il file .json è presente nella repo allora si può esporre con la seguente url : 
+   https://raw.githubusercontent.com/tekrar/jsondata/master/modena.json 
+   Bisogna sostituire nome utente (tekrar) , nome repo (jsondata) e nome file (modena.json) con i propri dati. 
+
+6- leggere il file .json esposto su github da file .html usando jQuery. 
+
+7- visualizzare i dati presi dal file json sia in modo semplice (con l'uso di document.getElementById)
+   che in modo un po' più complesso usando i grafici. 
+
+8- Bonus per chi utilizza librerie javascript diverse da quelle già viste durante le lezioni. 
+
+9- Mandare i progetti a Elena Barbieri che li girerà a me per essere valutati. 
+  
