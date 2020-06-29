@@ -1,7 +1,7 @@
 # Dati della pandemia di Coronavirus nel mondo e in Italia
 
 
-Raccolta dei dati ruguardanti la pandemia in corso:
+Raccolta dei dati riguardanti la pandemia in corso:
 
   - Tabelle con raccolta dati su fonti sicure;
   - Grafici dati mondiali incorporati da Frourish.studio
@@ -35,4 +35,4 @@ Problemi noti da risolvere:
     - Sistemare caricamento generale del sito;
     - Sistemare sito per renderlo responsive;
     - Creazione app mobile;
-    
+
